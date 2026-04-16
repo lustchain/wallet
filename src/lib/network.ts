@@ -52,7 +52,7 @@ export function getNetworkLogoFallback(input: {
 }
 
 export const NETWORK_PRESETS: NetworkPreset[] = [
-  { key: "lust", name: "LUST Chain", chainId: 6923, symbol: "LST", rpcUrl: "https://rpc.lustchain.org", explorerBaseUrl: "https://explorer.lustchain.org", logo: `${BASE}network-inri.png`, color: "#d72e7e" },
+  { key: "lust", name: "LUST Chain", chainId: 6923, symbol: "LST", rpcUrl: "https://rpc.lustchain.org", explorerBaseUrl: "https://explorer.lustchain.org", logo: `${BASE}network-lust.png`, color: "#d72e7e" },
   { key: "ethereum", name: "Ethereum", chainId: 1, symbol: "ETH", rpcUrl: "https://ethereum-rpc.publicnode.com", explorerBaseUrl: "https://etherscan.io", logo: `${BASE}network-ethereum.png`, color: "#627eea" },
   { key: "polygon", name: "Polygon", chainId: 137, symbol: "POL", rpcUrl: "https://polygon.drpc.org", explorerBaseUrl: "https://polygonscan.com", logo: `${BASE}network-polygon.png`, color: "#8247e5" },
   { key: "bsc", name: "BNB Chain", chainId: 56, symbol: "BNB", rpcUrl: "https://bsc-dataseed.binance.org", explorerBaseUrl: "https://bscscan.com", logo: `${BASE}network-bnb.png`, color: "#f0b90b" },

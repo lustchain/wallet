@@ -36,13 +36,13 @@ import { isValidSeedPhrase, normalizeSeed } from "../lib/inri";
 import { getSecuritySettings, type SecuritySettings } from "../lib/security";
 import { installDesktopEthereumProvider } from "../lib/desktopProvider";
 import { captureWcLaunchFromLocation, finishPendingWcLaunch, getPendingWcLaunch } from "../lib/wcLaunch";
-import { getInriNetwork, getStoredNetwork, saveStoredNetwork } from "../lib/network";
+import { getInriNetwork, saveStoredNetwork } from "../lib/network";
 import type { AppToastPayload, AppToastType } from "../lib/ui";
 import type { Tab } from "../lib/navigation";
 
 const BASE = import.meta.env.BASE_URL || "/";
-const VAULTS_KEY = "lust_wallet_vaults_v3";
-const CURRENT_WALLET_KEY = "lust_wallet_current_id_v3";
+const VAULTS_KEY = "lust_wallet_vaults_v4";
+const CURRENT_WALLET_KEY = "lust_wallet_current_id_v4";
 const LANG_KEY = "wallet_lang";
 const THEME_KEY = "wallet_theme";
 
@@ -188,7 +188,7 @@ export default function WalletShell() {
     document.body.style.background =
       theme === "light"
         ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
-        : "linear-gradient(180deg,#000000 0%, #08080d 100%)";
+        : "linear-gradient(180deg,#000000 0%, #05050a 100%)";
 
     document.body.style.color = theme === "light" ? "#10131a" : "#ffffff";
     document.body.style.margin = "0";
@@ -809,8 +809,8 @@ export default function WalletShell() {
       style={{
         background:
           theme === "light"
-            ? "linear-gradient(180deg,#eef3fb 0%, #f7f9fd 100%)"
-            : "linear-gradient(180deg,#0b0b0f 0%, #101625 100%)",
+            ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
+            : "linear-gradient(180deg,#000000 0%, #05050a 100%)",
       }}
     >
       <Header

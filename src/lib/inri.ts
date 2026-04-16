@@ -68,7 +68,7 @@ export const DEFAULT_TOKENS: TokenItem[] = [
   {
     symbol: "LST",
     subtitle: "native coin • pays gas",
-    logo: `${BASE}token-inri.png`,
+    logo: `${BASE}token-lst.png`,
     isDefault: true,
     isNative: true,
     decimals: 18,
@@ -77,7 +77,7 @@ export const DEFAULT_TOKENS: TokenItem[] = [
   {
     symbol: "wLST",
     subtitle: "wrapped native token",
-    logo: `${BASE}token-winri.png`,
+    logo: `${BASE}token-wlst.png`,
     isDefault: true,
     address: "0x0000000000000000000000000000000000000000",
     decimals: 18,
