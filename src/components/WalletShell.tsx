@@ -34,8 +34,12 @@ import { handleRequestMethod } from "../lib/wcRequestHandlers";
 import { isValidSeedPhrase, normalizeSeed } from "../lib/inri";
 import { getSecuritySettings, type SecuritySettings } from "../lib/security";
 import { installDesktopEthereumProvider } from "../lib/desktopProvider";
-import { captureWcLaunchFromLocation, finishPendingWcLaunch, getPendingWcLaunch } from "../lib/wcLaunch";
-import { getInriNetwork, getStoredNetwork, saveStoredNetwork } from "../lib/network";
+import {
+  captureWcLaunchFromLocation,
+  finishPendingWcLaunch,
+  getPendingWcLaunch,
+} from "../lib/wcLaunch";
+import { getStoredNetwork, saveStoredNetwork } from "../lib/network";
 import type { AppToastPayload, AppToastType } from "../lib/ui";
 import type { Tab } from "../lib/navigation";
 
@@ -43,6 +47,7 @@ const VAULTS_KEY = "lust_wallet_vaults_v6";
 const CURRENT_WALLET_KEY = "lust_wallet_current_id_v6";
 const LANG_KEY = "lust_wallet_lang_v6";
 const THEME_KEY = "lust_wallet_theme_v6";
+const BASE = import.meta.env.BASE_URL || "/";
 
 type View = "auth" | "wallet";
 
@@ -86,7 +91,9 @@ export default function WalletShell() {
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [toasts, setToasts] = useState<Array<{ id: number; message: string; type: AppToastType }>>([]);
+  const [toasts, setToasts] = useState<Array<{ id: number; message: string; type: AppToastType }>>(
+    []
+  );
 
   const [unlockedWallet, setUnlockedWallet] = useState<UnlockedWallet | null>(null);
   const [security, setSecurity] = useState<SecuritySettings>(() => getSecuritySettings());
@@ -95,7 +102,9 @@ export default function WalletShell() {
   const [reauthError, setReauthError] = useState("");
 
   const autoLockTimerRef = useRef<number | null>(null);
-  const pendingSensitiveActionRef = useRef<null | ((overridePrivateKey?: string) => Promise<void>)>(null);
+  const pendingSensitiveActionRef = useRef<null | ((overridePrivateKey?: string) => Promise<void>)>(
+    null
+  );
   const handledWcLaunchRef = useRef<string>("");
 
   const [wcProposal, setWcProposal] = useState<any | null>(null);
@@ -135,7 +144,6 @@ export default function WalletShell() {
     walletAlreadyExists: tr(lang, "auth_wallet_already_exists"),
   };
 
-
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<AppToastPayload>).detail;
@@ -143,17 +151,22 @@ export default function WalletShell() {
       const id = Date.now() + Math.floor(Math.random() * 1000);
       const duration = Math.max(1200, Math.min(detail.durationMs || 2600, 6000));
       setToasts((prev) => [...prev, { id, message: detail.message, type: detail.type || "info" }]);
-      window.setTimeout(() => setToasts((prev) => prev.filter((item) => item.id !== id)), duration);
+      window.setTimeout(() => {
+        setToasts((prev) => prev.filter((item) => item.id !== id));
+      }, duration);
     };
+
     window.addEventListener("app-toast", handler as EventListener);
     return () => window.removeEventListener("app-toast", handler as EventListener);
   }, []);
 
   useEffect(() => {
     if (!localStorage.getItem("wallet_active_network")) {
-      saveStoredNetwork(getInriNetwork());
+      const initialNetwork = getStoredNetwork();
+      saveStoredNetwork(initialNetwork);
       window.dispatchEvent(new Event("wallet-network-updated"));
     }
+
     const saved = localStorage.getItem(VAULTS_KEY);
     const currentId = localStorage.getItem(CURRENT_WALLET_KEY);
 
@@ -205,13 +218,13 @@ export default function WalletShell() {
     sync();
     return wcStoreSubscribe(sync);
   }, []);
+
   useEffect(() => {
     const launch = captureWcLaunchFromLocation();
     if (!launch) return;
     setTab("walletconnect");
     showMessage("WalletConnect launch detected");
   }, []);
-
 
   function ensureFavicon() {
     let link = document.querySelector("link[rel='icon']") as HTMLLinkElement | null;
@@ -409,22 +422,23 @@ export default function WalletShell() {
     }
   }
 
-  const lockWallet = useCallback((reason?: string) => {
-    pendingSensitiveActionRef.current = null;
-    setReauthOpen(false);
-    setReauthPassword("");
-    setReauthError("");
-    setUnlockedWallet((current) => {
-      if (!current) return null;
-      return null;
-    });
-    setView("auth");
-    setUnlockPassword("");
-    showMessage(reason || t.locked);
-  }, [t.locked]);
+  const lockWallet = useCallback(
+    (reason?: string) => {
+      pendingSensitiveActionRef.current = null;
+      setReauthOpen(false);
+      setReauthPassword("");
+      setReauthError("");
+      setUnlockedWallet(() => null);
+      setView("auth");
+      setUnlockPassword("");
+      showMessage(reason || t.locked);
+    },
+    [t.locked]
+  );
 
   const markActivity = useCallback(() => {
     if (!unlockedWallet || !security.autoLockEnabled) return;
+
     if (autoLockTimerRef.current) {
       window.clearTimeout(autoLockTimerRef.current);
     }
@@ -432,7 +446,7 @@ export default function WalletShell() {
     autoLockTimerRef.current = window.setTimeout(() => {
       lockWallet(trf(lang, "security_locked_inactivity", { minutes: security.autoLockMinutes }));
     }, security.autoLockMinutes * 60 * 1000);
-  }, [lockWallet, security.autoLockEnabled, security.autoLockMinutes, unlockedWallet]);
+  }, [lang, lockWallet, security.autoLockEnabled, security.autoLockMinutes, unlockedWallet]);
 
   useEffect(() => {
     if (!unlockedWallet || !security.autoLockEnabled) {
@@ -443,8 +457,16 @@ export default function WalletShell() {
       return;
     }
 
-    const events: Array<keyof WindowEventMap> = ["pointerdown", "keydown", "touchstart", "focus", "mousemove"];
+    const events: Array<keyof WindowEventMap> = [
+      "pointerdown",
+      "keydown",
+      "touchstart",
+      "focus",
+      "mousemove",
+    ];
+
     let throttle = 0;
+
     const handleActivity = () => {
       const now = Date.now();
       if (now - throttle < 1500) return;
@@ -462,7 +484,9 @@ export default function WalletShell() {
     };
 
     markActivity();
-    events.forEach((eventName) => window.addEventListener(eventName, handleActivity, { passive: true }));
+    events.forEach((eventName) =>
+      window.addEventListener(eventName, handleActivity, { passive: true })
+    );
     document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
@@ -473,7 +497,7 @@ export default function WalletShell() {
         autoLockTimerRef.current = null;
       }
     };
-  }, [lockWallet, markActivity, security.autoLockEnabled, security.lockOnHidden, unlockedWallet]);
+  }, [lang, lockWallet, markActivity, security.autoLockEnabled, security.lockOnHidden, unlockedWallet]);
 
   async function runSensitiveAction(action: (overridePrivateKey?: string) => Promise<void>) {
     if (!security.requirePasswordForSensitiveActions) {
@@ -502,7 +526,11 @@ export default function WalletShell() {
     }
 
     try {
-      const decrypted = await ethers.Wallet.fromEncryptedJson(vault.encryptedJson, reauthPassword.trim());
+      const decrypted = await ethers.Wallet.fromEncryptedJson(
+        vault.encryptedJson,
+        reauthPassword.trim()
+      );
+
       setUnlockedWallet((current) =>
         current
           ? {
@@ -550,6 +578,7 @@ export default function WalletShell() {
       console.error("WalletConnect init failed:", err);
     });
   }, [activeAddress]);
+
   useEffect(() => {
     if (!activeAddress || view !== "wallet") return;
 
@@ -609,7 +638,7 @@ export default function WalletShell() {
     });
 
     return cleanup;
-  }, [unlockedWallet, security, lang]);
+  }, [lang, security, unlockedWallet]);
 
   async function onApproveProposal() {
     if (!unlockedWallet || !wcProposal) {
@@ -714,9 +743,6 @@ export default function WalletShell() {
       case "swap":
         return <SwapScreen theme={theme} lang={lang} address={address} />;
 
-      case "bridge":
-        return <BridgeScreen theme={theme} lang={lang} address={address} privateKey={privateKey} />;
-
       case "staking":
         return <StakingScreen theme={theme} lang={lang} address={address} privateKey={privateKey} />;
 
@@ -731,7 +757,6 @@ export default function WalletShell() {
 
       case "assets":
         return <AssetManagerScreen theme={theme} lang={lang} />;
-
 
       case "settings":
         return (
@@ -807,12 +832,12 @@ export default function WalletShell() {
       style={{
         background:
           theme === "light"
-            ? "linear-gradient(180deg,#eef3fb 0%, #f7f9fd 100%)"
-            : "linear-gradient(180deg,#0b0b0f 0%, #101625 100%)",
+            ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
+            : "linear-gradient(180deg,#000000 0%, #08080d 100%)",
       }}
     >
       <Header
-          onOpenSettings={() => setTab("settings")}
+        onOpenSettings={() => setTab("settings")}
         walletName={currentWalletMeta?.name || "Lust Wallet"}
         theme={theme}
         lang={lang}
@@ -849,7 +874,10 @@ export default function WalletShell() {
         onReject={onRejectRequest}
       />
 
-      <ToastViewport toasts={toasts} onDismiss={(id) => setToasts((prev) => prev.filter((item) => item.id !== id))} />
+      <ToastViewport
+        toasts={toasts}
+        onDismiss={(id) => setToasts((prev) => prev.filter((item) => item.id !== id))}
+      />
 
       <ReauthModal
         open={reauthOpen}
@@ -875,22 +903,15 @@ export default function WalletShell() {
   );
 }
 
-
-
-
-
-
-
-
-
-
 function secondaryButtonStyle(theme: "dark" | "light"): React.CSSProperties {
   return {
     padding: "10px 14px",
     borderRadius: 12,
-    border: `1px solid ${theme === "light" ? "#dbe2f0" : "#252b39"}`,
-    background: theme === "light" ? "#ffffff" : "#1b2741",
-    color: theme === "light" ? "#10131a" : "#fff",
+    border: `1px solid ${
+      theme === "light" ? "rgba(215,46,126,.20)" : "rgba(215,46,126,.28)"
+    }`,
+    background: theme === "light" ? "#ffffff" : "#0d0d12",
+    color: theme === "light" ? "#10131a" : "#ffffff",
     cursor: "pointer",
     fontWeight: 700,
   };
