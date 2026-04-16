@@ -12,13 +12,44 @@ export default function StatusPill({
   theme?: "dark" | "light";
 }) {
   const isLight = theme === "light";
+
   const styles: Record<Tone, React.CSSProperties> = {
-    success: { background: isLight ? "#eefaf1" : "rgba(74,222,128,.1)", color: isLight ? "#1e7d4b" : "#6ee7a6" },
-    primary: { background: isLight ? "#eef4ff" : "rgba(215,46,126,.12)", color: "#6ea0ff" },
-    warning: { background: isLight ? "#fff5e8" : "rgba(251,191,36,.12)", color: isLight ? "#9a5a00" : "#ffd179" },
-    danger: { background: isLight ? "#fff0f0" : "rgba(255,123,123,.12)", color: "#ff7b7b" },
-    neutral: { background: isLight ? "#eff3f8" : "rgba(148,163,184,.12)", color: isLight ? "#59657a" : "#9fb0cb" },
+    success: {
+      background: isLight ? "#fff0f7" : "rgba(215,46,126,.12)",
+      color: "rgb(215,46,126)",
+      border: "1px solid rgba(215,46,126,.28)",
+    },
+    primary: {
+      background: isLight ? "#fff0f7" : "rgba(215,46,126,.12)",
+      color: isLight ? "#10131a" : "#ffffff",
+      border: "1px solid rgba(215,46,126,.28)",
+    },
+    warning: {
+      background: isLight ? "#fff0f7" : "rgba(215,46,126,.12)",
+      color: "rgb(215,46,126)",
+      border: "1px solid rgba(215,46,126,.28)",
+    },
+    danger: {
+      background: isLight ? "#fff0f7" : "rgba(215,46,126,.12)",
+      color: "rgb(215,46,126)",
+      border: "1px solid rgba(215,46,126,.28)",
+    },
+    neutral: {
+      background: isLight ? "#fff7fb" : "#0a0a0f",
+      color: isLight ? "#10131a" : "#ffffff",
+      border: "1px solid rgba(215,46,126,.18)",
+    },
   };
 
-  return <span className="wallet-status-pill" style={styles[tone]}>{children}</span>;
+  return (
+    <span
+      className="wallet-status-pill"
+      style={{
+        ...styles[tone],
+        fontWeight: 800,
+      }}
+    >
+      {children}
+    </span>
+  );
 }

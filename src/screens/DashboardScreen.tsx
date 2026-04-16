@@ -9,12 +9,6 @@ import EmptyState from "../components/EmptyState";
 import StatusPill from "../components/StatusPill";
 import LogoImage from "../components/LogoImage";
 
-declare global {
-  interface Window {
-    deferredPrompt?: any;
-  }
-}
-
 type DashboardToken = TokenItem & { balance: string };
 type CustomToken = DashboardToken & { networkKey?: string };
 const CUSTOM_TOKENS_KEY = "wallet_custom_tokens";
@@ -30,9 +24,18 @@ function readCustomTokens() {
   }
 }
 
-export default function DashboardScreen({ setTab, theme = "dark", lang = "en", address = "" }: { setTab: (tab: any) => void; theme?: "dark" | "light"; lang?: string; address?: string; }) {
+export default function DashboardScreen({
+  setTab,
+  theme = "dark",
+  lang = "en",
+  address = "",
+}: {
+  setTab: (tab: any) => void;
+  theme?: "dark" | "light";
+  lang?: string;
+  address?: string;
+}) {
   const [balance, setBalance] = useState("0.000000");
-  const [canInstall, setCanInstall] = useState(false);
   const [network, setNetwork] = useState<NetworkItem>(getStoredNetwork());
   const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
   const isLight = theme === "light";
@@ -46,9 +49,10 @@ export default function DashboardScreen({ setTab, theme = "dark", lang = "en", a
 
   useEffect(() => {
     let active = true;
+
     async function loadHomeData() {
       try {
-        const [balances] = await Promise.all([loadAllBalances(address || "", homeTokens, network.key)]);
+        const balances = await loadAllBalances(address || "", homeTokens, network.key);
         if (!active) return;
         setBalance(balances[network.symbol] || balances[homeTokens[0]?.symbol || ""] || "0.000000");
         setTokenBalances(balances);
@@ -58,38 +62,31 @@ export default function DashboardScreen({ setTab, theme = "dark", lang = "en", a
         setTokenBalances({});
       }
     }
+
     loadHomeData();
     const timer = setInterval(loadHomeData, 8000);
-    const handler = (e: any) => { e.preventDefault(); window.deferredPrompt = e; setCanInstall(true); };
     const sync = () => setNetwork(getStoredNetwork());
-    window.addEventListener("beforeinstallprompt", handler as any);
     window.addEventListener("storage", sync);
     window.addEventListener("wallet-network-updated", sync as EventListener);
+
     return () => {
       active = false;
       clearInterval(timer);
-      window.removeEventListener("beforeinstallprompt", handler as any);
       window.removeEventListener("storage", sync);
       window.removeEventListener("wallet-network-updated", sync as EventListener);
     };
   }, [address, network.key, homeTokens.length, network.symbol]);
 
-  function openWalletConnect() {
-    window.dispatchEvent(new CustomEvent("wallet-open-wc", { detail: { source: "dashboard" } }));
-    setTab("walletconnect");
-  }
-
-  async function installApp() {
-    const promptEvent = window.deferredPrompt;
-    if (!promptEvent) return;
-    await promptEvent.prompt();
-    window.deferredPrompt = null;
-    setCanInstall(false);
-  }
-
   return (
     <div className="wallet-screen-stack wallet-screen-mobile-tight">
-      <ScreenCard theme={theme} className="wallet-home-hero">
+      <ScreenCard
+        theme={theme}
+        className="wallet-home-hero"
+        style={{
+          background: isLight ? "#fff7fb" : "#09090f",
+          borderColor: isLight ? "#f3d7e6" : "#2a0f20",
+        }}
+      >
         <SectionTitle
           title={tr(lang, "dashboard_total_balance")}
           subtitle={address ? address : "Wallet not available yet"}
@@ -98,58 +95,117 @@ export default function DashboardScreen({ setTab, theme = "dark", lang = "en", a
           actions={<StatusPill theme={theme} tone="primary">{network.symbol}</StatusPill>}
         />
 
-        <div style={{ fontSize: 34, fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", wordBreak: "break-word", lineHeight: 1.05 }}>
+        <div
+          style={{
+            fontSize: 40,
+            fontWeight: 900,
+            color: isLight ? "#10131a" : "#ffffff",
+            lineHeight: 1.02,
+            wordBreak: "break-word",
+          }}
+        >
           {balance} {network.symbol}
         </div>
 
-        <div className="wallet-home-meta-row">
-          <div className="wallet-mini-stat" style={{ background: isLight ? "#fff0f7" : "rgba(215,46,126,.14)", color: "rgb(215,46,126)" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 12px",
+              borderRadius: 999,
+              border: "1px solid rgba(215,46,126,.25)",
+              background: isLight ? "#fff0f7" : "rgba(215,46,126,.10)",
+              color: isLight ? "#10131a" : "#ffffff",
+              fontWeight: 800,
+              fontSize: 13,
+            }}
+          >
             <LogoImage src={network.logo} alt={network.name} kind="network" label={network.name} symbol={network.symbol} size={18} />
             <span>{network.name}</span>
-            <span style={{ opacity: 0.72 }}>•</span>
+            <span style={{ opacity: 0.5 }}>•</span>
             <span>Chain {network.chainId}</span>
           </div>
         </div>
 
-        <div className="wallet-home-actions-grid wallet-home-actions-grid-single">
-          <ActionButton onClick={() => setTab("send")} theme={theme} tone="primary" compact>{tr(lang, "dashboard_send")}</ActionButton>
-          <ActionButton onClick={() => setTab("receive")} theme={theme} compact>{tr(lang, "dashboard_receive")}</ActionButton>
-          <ActionButton onClick={openWalletConnect} theme={theme} compact>⌁ WalletConnect</ActionButton>
-          <ActionButton onClick={() => setTab("staking")} theme={theme} tone="ghost" compact>Staking</ActionButton>
-          <ActionButton onClick={() => setTab("more")} theme={theme} tone="ghost" compact>More</ActionButton>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
+            gap: 10,
+            marginTop: 16,
+          }}
+        >
+          <ActionButton onClick={() => setTab("send")} theme={theme} tone="primary" compact>
+            {tr(lang, "dashboard_send")}
+          </ActionButton>
+          <ActionButton onClick={() => setTab("receive")} theme={theme} compact>
+            {tr(lang, "dashboard_receive")}
+          </ActionButton>
+          <ActionButton onClick={() => setTab("walletconnect")} theme={theme} compact>
+            WalletConnect
+          </ActionButton>
+          <ActionButton onClick={() => setTab("staking")} theme={theme} tone="ghost" compact>
+            Staking
+          </ActionButton>
         </div>
-
-        {canInstall ? (
-          <div className="wallet-action-row">
-            <button onClick={installApp} className="wallet-link-chip" type="button">
-              {tr(lang, "dashboard_install_app")}
-            </button>
-          </div>
-        ) : null}
       </ScreenCard>
 
-      <ScreenCard theme={theme}>
+      <ScreenCard
+        theme={theme}
+        style={{
+          background: isLight ? "#fff7fb" : "#09090f",
+          borderColor: isLight ? "#f3d7e6" : "#2a0f20",
+        }}
+      >
         <SectionTitle
           title={tr(lang, "nav_tokens")}
           subtitle={network.name}
           theme={theme}
-          actions={<ActionButton onClick={() => setTab("tokens")} theme={theme} compact>{tr(lang, "nav_tokens")}</ActionButton>}
+          actions={
+            <ActionButton onClick={() => setTab("tokens")} theme={theme} compact>
+              {tr(lang, "nav_tokens")}
+            </ActionButton>
+          }
         />
 
         {!homeTokens.length ? (
-          <EmptyState theme={theme} title="No tokens yet" description="Add custom assets or switch network to populate your portfolio." />
+          <EmptyState
+            theme={theme}
+            title="No tokens yet"
+            description="Add custom assets or switch network to populate your portfolio."
+          />
         ) : (
           <div style={{ display: "grid", gap: 10 }}>
             {homeTokens.slice(0, 6).map((token) => (
-              <div key={token.symbol + (token.address || "native")} className="wallet-list-row" style={{ background: isLight ? "#f8fbff" : "#0f1520", borderColor: isLight ? "#e6ecf5" : "#202635" }}>
+              <div
+                key={token.symbol + (token.address || "native")}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  padding: 14,
+                  borderRadius: 18,
+                  border: `1px solid ${isLight ? "#f3d7e6" : "#2a0f20"}`,
+                  background: isLight ? "#ffffff" : "#05050a",
+                }}
+              >
                 <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                  <LogoImage src={token.logo} alt={token.symbol} kind="token" label={token.symbol} symbol={token.symbol} size={40} />
+                  <LogoImage src={token.logo} alt={token.symbol} kind="token" label={token.symbol} symbol={token.symbol} size={42} />
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16 }}>{token.symbol}</div>
-                    <div className="wallet-ui-subtle" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 240 }}>{token.subtitle}</div>
+                    <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16 }}>
+                      {token.symbol}
+                    </div>
+                    <div className="wallet-ui-subtle" style={{ color: isLight ? "#475569" : "#cbd5e1" }}>
+                      {token.subtitle}
+                    </div>
                   </div>
                 </div>
-                <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16, textAlign: "right", overflowWrap: "anywhere" }}>{token.balance}</div>
+                <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16 }}>
+                  {token.balance}
+                </div>
               </div>
             ))}
           </div>
