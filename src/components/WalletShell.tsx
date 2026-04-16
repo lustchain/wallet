@@ -199,7 +199,7 @@ export default function WalletShell() {
     document.body.style.background =
       theme === "light"
         ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
-        : "linear-gradient(180deg,#000000 0%, #08080d 100%)";
+        : "#000000";
 
     document.body.style.color = theme === "light" ? "#10131a" : "#ffffff";
     document.body.style.margin = "0";
@@ -475,12 +475,9 @@ export default function WalletShell() {
     };
 
     const handleVisibility = () => {
-      if (document.hidden && security.lockOnHidden) {
-        lockWallet(tr(lang, "security_locked_background"));
-        return;
+      if (!document.hidden) {
+        markActivity();
       }
-
-      if (!document.hidden) markActivity();
     };
 
     markActivity();
@@ -497,7 +494,7 @@ export default function WalletShell() {
         autoLockTimerRef.current = null;
       }
     };
-  }, [lang, lockWallet, markActivity, security.autoLockEnabled, security.lockOnHidden, unlockedWallet]);
+  }, [markActivity, security.autoLockEnabled, unlockedWallet]);
 
   async function runSensitiveAction(action: (overridePrivateKey?: string) => Promise<void>) {
     if (!security.requirePasswordForSensitiveActions) {
@@ -744,7 +741,14 @@ export default function WalletShell() {
         return <SwapScreen theme={theme} lang={lang} address={address} />;
 
       case "staking":
-        return <StakingScreen theme={theme} lang={lang} address={address} privateKey={privateKey} />;
+        return (
+          <StakingScreen
+            theme={theme}
+            lang={lang}
+            address={address}
+            privateKey={privateKey}
+          />
+        );
 
       case "more":
         return <MoreScreen theme={theme} lang={lang} setTab={setTab as any} />;
@@ -833,7 +837,7 @@ export default function WalletShell() {
         background:
           theme === "light"
             ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
-            : "linear-gradient(180deg,#000000 0%, #08080d 100%)",
+            : "#000000",
       }}
     >
       <Header
