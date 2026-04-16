@@ -53,7 +53,7 @@ const WALLET_ALIASES: Record<string, string[]> = {
 
 const DEFAULT_PUBLIC_REGISTRY: AssetRegistry = {
   networks: {
-    lust: { path: "network-inri.png", updatedAt: 0 },
+    lust: { path: "network-lust.png", updatedAt: 0 },
     ethereum: { path: "network-ethereum.png", updatedAt: 0 },
     polygon: { path: "network-polygon.png", updatedAt: 0 },
     bnb: { path: "network-bnb.png", updatedAt: 0 },
@@ -78,8 +78,8 @@ const DEFAULT_PUBLIC_REGISTRY: AssetRegistry = {
     berachain: { path: "network-berachain.png", updatedAt: 0 },
   },
   tokens: {
-    lust: { path: "token-inri.png", updatedAt: 0 },
-    wlst: { path: "token-winri.png", updatedAt: 0 },
+    lust: { path: "token-lst.png", updatedAt: 0 },
+    wlst: { path: "token-wlst.png", updatedAt: 0 },
     usdt: { path: "token-usdt.png", updatedAt: 0 },
     usdt: { path: "token-usdt.png", updatedAt: 0 },
     usdc: { path: "token-usdc.png", updatedAt: 0 },
@@ -91,7 +91,7 @@ const DEFAULT_PUBLIC_REGISTRY: AssetRegistry = {
     sei: { path: "token-sei.png", updatedAt: 0 },
   },
   dapps: {
-    lust: { path: "brand-inri.png", updatedAt: 0 },
+    lust: { path: "brand-lust.png", updatedAt: 0 },
     walletconnect: { path: "brand-walletconnect.png", updatedAt: 0 },
   },
   wallets: {

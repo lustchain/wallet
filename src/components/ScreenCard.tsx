@@ -18,8 +18,8 @@ export default function ScreenCard({
     <section
       className={`wallet-ui-card ${className}`.trim()}
       style={{
-        background: isLight ? "#ffffff" : "#09090f",
-        borderColor: isLight ? "#f3d7e6" : "#2a0f20",
+        background: isLight ? "#ffffff" : "#121621",
+        borderColor: isLight ? "#dbe2f0" : "#252b39",
         padding,
         ...style,
       }}

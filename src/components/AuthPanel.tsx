@@ -110,7 +110,7 @@ export default function AuthPanel({
           <div className="wallet-auth-subtitle" style={{ color: isLight ? "#5b6578" : "#97a0b3" }}>{texts.authSubtitle}</div>
         </div>
 
-        <div className="wallet-surface wallet-auth-card" style={{ background: isLight ? "rgba(255,247,251,.96)" : "rgba(10,10,14,.94)" }}>
+        <div className="wallet-surface wallet-auth-card" style={{ background: isLight ? "rgba(255,255,255,.94)" : "rgba(18,22,33,.92)" }}>
           <div className="wallet-auth-tabs">
             <button onClick={() => setMode("unlock")} style={tabButtonStyle(mode === "unlock", theme)}>{texts.unlock}</button>
             <button onClick={() => setMode("create")} style={tabButtonStyle(mode === "create", theme)}>{texts.create}</button>

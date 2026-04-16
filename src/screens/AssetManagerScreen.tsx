@@ -130,7 +130,7 @@ export default function AssetManagerScreen({ theme = "dark" }: { theme?: "dark" 
       </ScreenCard>
 
       <ScreenCard theme={theme}>
-        <SectionTitle theme={theme} title="Registry maintenance" compact subtitle="Use predictable names like network-inri.png, token-winri.png or wallet-ledger.png. The wallet checks the registry first and falls back to defaults after that." />
+        <SectionTitle theme={theme} title="Registry maintenance" compact subtitle="Use predictable names like network-lust.png, token-wlst.png or wallet-ledger.png. The wallet checks the registry first and falls back to defaults after that." />
         <div className="wallet-action-row">
           <ActionButton theme={theme} tone="ghost" onClick={() => setConfirm({ title: "Reset entire registry?", description: "All custom logo overrides will be cleared and the wallet will fall back to default assets.", confirmLabel: "Reset registry", action: () => { resetAssetRegistry(); resetDraft(); setConfirm(null); refresh("Asset registry reset", "warning"); } })}>Reset registry</ActionButton>
         </div>

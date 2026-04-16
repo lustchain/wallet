@@ -69,30 +69,28 @@ export default function DashboardScreen({ setTab, theme = "dark", lang = "en", a
       <ScreenCard theme={theme} className="wallet-home-hero" style={{ background: isLight ? "#fff7fb" : "#09090f", borderColor: isLight ? "#f3d7e6" : "#2a0f20" }}>
         <SectionTitle
           title={tr(lang, "dashboard_total_balance")}
-          subtitle={address ? address : "Wallet not available yet"}
+          subtitle={address ? address : "Unlock your wallet to view your portfolio."}
           theme={theme}
           compact
           actions={<StatusPill theme={theme} tone="primary">{network.symbol}</StatusPill>}
         />
 
-        <div style={{ fontSize: 42, fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", lineHeight: 1.02, wordBreak: "break-word" }}>
+        <div style={{ fontSize: 40, fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", lineHeight: 1.02, wordBreak: "break-word" }}>
           {balance} {network.symbol}
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 12 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 12px", borderRadius: 999, border: "1px solid rgba(215,46,126,.25)", background: isLight ? "#fff0f7" : "rgba(215,46,126,.10)", color: isLight ? "#10131a" : "#ffffff", fontWeight: 800, fontSize: 13 }}>
             <LogoImage src={network.logo} alt={network.name} kind="network" label={network.name} symbol={network.symbol} size={18} />
             <span>{network.name}</span>
-            <span style={{ opacity: 0.5 }}>•</span>
-            <span>{network.chainId}</span>
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10, marginTop: 18 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 10, marginTop: 16 }}>
           <ActionButton onClick={() => setTab("send")} theme={theme} tone="primary" compact>{tr(lang, "dashboard_send")}</ActionButton>
           <ActionButton onClick={() => setTab("receive")} theme={theme} compact>{tr(lang, "dashboard_receive")}</ActionButton>
-          <ActionButton onClick={() => setTab("staking")} theme={theme} compact>Staking</ActionButton>
-          <ActionButton onClick={() => setTab("activity")} theme={theme} tone="ghost" compact>Activity</ActionButton>
+          <ActionButton onClick={() => setTab("more")} theme={theme} compact>Rewards</ActionButton>
+          <ActionButton onClick={() => setTab("staking")} theme={theme} tone="ghost" compact>Staking</ActionButton>
         </div>
       </ScreenCard>
 
@@ -109,7 +107,7 @@ export default function DashboardScreen({ setTab, theme = "dark", lang = "en", a
                   <LogoImage src={token.logo} alt={token.symbol} kind="token" label={token.symbol} symbol={token.symbol} size={42} />
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16 }}>{token.symbol}</div>
-                    <div className="wallet-ui-subtle" style={{ color: isLight ? "#6b7280" : "#aeb4c2" }}>{token.subtitle}</div>
+                    <div className="wallet-ui-subtle" style={{ color: isLight ? "#475569" : "#cbd5e1" }}>{token.subtitle}</div>
                   </div>
                 </div>
                 <div style={{ fontWeight: 900, color: isLight ? "#10131a" : "#ffffff", fontSize: 16 }}>{token.balance}</div>

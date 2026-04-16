@@ -12,7 +12,6 @@ import ReceiveScreen from "../screens/ReceiveScreen";
 import TokensScreen from "../screens/TokensScreen";
 import ActivityScreen from "../screens/ActivityScreen";
 import SwapScreen from "../screens/SwapScreen";
-import BridgeScreen from "../screens/BridgeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import NFTsScreen from "../screens/NFTsScreen";
 import StakingScreen from "../screens/StakingScreen";
@@ -36,15 +35,14 @@ import { isValidSeedPhrase, normalizeSeed } from "../lib/inri";
 import { getSecuritySettings, type SecuritySettings } from "../lib/security";
 import { installDesktopEthereumProvider } from "../lib/desktopProvider";
 import { captureWcLaunchFromLocation, finishPendingWcLaunch, getPendingWcLaunch } from "../lib/wcLaunch";
-import { getInriNetwork, saveStoredNetwork } from "../lib/network";
+import { getInriNetwork, getStoredNetwork, saveStoredNetwork } from "../lib/network";
 import type { AppToastPayload, AppToastType } from "../lib/ui";
 import type { Tab } from "../lib/navigation";
 
-const BASE = import.meta.env.BASE_URL || "/";
-const VAULTS_KEY = "lust_wallet_vaults_v4";
-const CURRENT_WALLET_KEY = "lust_wallet_current_id_v4";
-const LANG_KEY = "wallet_lang";
-const THEME_KEY = "wallet_theme";
+const VAULTS_KEY = "lust_wallet_vaults_v6";
+const CURRENT_WALLET_KEY = "lust_wallet_current_id_v6";
+const LANG_KEY = "lust_wallet_lang_v6";
+const THEME_KEY = "lust_wallet_theme_v6";
 
 type View = "auth" | "wallet";
 
@@ -188,7 +186,7 @@ export default function WalletShell() {
     document.body.style.background =
       theme === "light"
         ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
-        : "linear-gradient(180deg,#000000 0%, #05050a 100%)";
+        : "linear-gradient(180deg,#000000 0%, #08080d 100%)";
 
     document.body.style.color = theme === "light" ? "#10131a" : "#ffffff";
     document.body.style.margin = "0";
@@ -548,7 +546,7 @@ export default function WalletShell() {
   useEffect(() => {
     if (!activeAddress) return;
 
-    initWalletConnect(activeAddress, Number(getStoredNetwork().chainId || 3777)).catch((err) => {
+    initWalletConnect(activeAddress, Number(getStoredNetwork().chainId || 6923)).catch((err) => {
       console.error("WalletConnect init failed:", err);
     });
   }, [activeAddress]);
@@ -565,7 +563,7 @@ export default function WalletShell() {
     let cancelled = false;
 
     window.setTimeout(() => {
-      initWalletConnect(activeAddress, Number(getStoredNetwork().chainId || 3777))
+      initWalletConnect(activeAddress, Number(getStoredNetwork().chainId || 6923))
         .then(async () => {
           if (cancelled) return;
           await pairWalletConnect(pending.uri!);
@@ -598,7 +596,7 @@ export default function WalletShell() {
               const result = await handleRequestMethod({
                 ...args,
                 privateKey: overridePrivateKey || unlockedWallet.privateKey,
-                chainId: `eip155:${Number(getStoredNetwork().chainId || 3777)}`,
+                chainId: `eip155:${Number(getStoredNetwork().chainId || 6923)}`,
               });
               resolve(result);
             } catch (error) {
@@ -809,8 +807,8 @@ export default function WalletShell() {
       style={{
         background:
           theme === "light"
-            ? "linear-gradient(180deg,#fff7fb 0%, #fffafe 100%)"
-            : "linear-gradient(180deg,#000000 0%, #05050a 100%)",
+            ? "linear-gradient(180deg,#eef3fb 0%, #f7f9fd 100%)"
+            : "linear-gradient(180deg,#0b0b0f 0%, #101625 100%)",
       }}
     >
       <Header
