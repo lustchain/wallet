@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getStoredNetwork, saveStoredNetwork, getAllNetworks, type NetworkItem } from "../lib/network";
 import LogoImage from "./LogoImage";
 
+const BASE = import.meta.env.BASE_URL || "/";
+
 export default function Header({
   walletName,
   theme = "dark",
@@ -28,34 +30,22 @@ export default function Header({
       style={{
         borderBottom: `1px solid ${isLight ? "#f3d7e6" : "#2a0f20"}`,
         background: isLight ? "#fff7fb" : "#05050a",
+        position: "sticky",
+        top: 0,
+        zIndex: 30,
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
         <img
-          src={`${import.meta.env.BASE_URL || "/"}brand-inri.png`}
+          src={`${BASE}brand-inri.png`}
           alt="Lust Wallet"
           style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }}
         />
         <div style={{ minWidth: 0 }}>
-          <div
-            style={{
-              color: isLight ? "#10131a" : "#ffffff",
-              fontWeight: 900,
-              fontSize: 18,
-              lineHeight: 1.05,
-            }}
-          >
+          <div style={{ color: isLight ? "#10131a" : "#ffffff", fontWeight: 900, fontSize: 18, lineHeight: 1.05 }}>
             Lust Wallet
           </div>
-          <div
-            className="wallet-ui-subtle"
-            style={{
-              color: isLight ? "#475569" : "#cbd5e1",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
+          <div className="wallet-ui-subtle" style={{ color: isLight ? "#475569" : "#cbd5e1", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {walletName || "LUST ecosystem wallet"}
           </div>
         </div>
@@ -70,16 +60,10 @@ export default function Header({
             background: isLight ? "#fff0f7" : "rgba(215,46,126,.12)",
             border: "1px solid rgba(215,46,126,.35)",
             color: isLight ? "#10131a" : "#ffffff",
+            maxWidth: 260,
           }}
         >
-          <LogoImage
-            src={network.logo}
-            alt={network.name}
-            kind="network"
-            label={network.name}
-            symbol={network.symbol}
-            size={18}
-          />
+          <LogoImage src={network.logo} alt={network.name} kind="network" label={network.name} symbol={network.symbol} size={18} />
           <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {network.name} · {network.chainId}
           </span>
@@ -133,23 +117,13 @@ export default function Header({
                   padding: "10px 12px",
                   borderRadius: 14,
                   border: "1px solid rgba(215,46,126,.16)",
-                  background:
-                    Number(item.chainId) === Number(network.chainId)
-                      ? "rgba(215,46,126,.14)"
-                      : "transparent",
+                  background: Number(item.chainId) === Number(network.chainId) ? "rgba(215,46,126,.14)" : "transparent",
                   color: isLight ? "#10131a" : "#ffffff",
                   cursor: "pointer",
                   textAlign: "left",
                 }}
               >
-                <LogoImage
-                  src={item.logo}
-                  alt={item.name}
-                  kind="network"
-                  label={item.name}
-                  symbol={item.symbol}
-                  size={20}
-                />
+                <LogoImage src={item.logo} alt={item.name} kind="network" label={item.name} symbol={item.symbol} size={20} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 800 }}>{item.name}</div>
                   <div className="wallet-ui-subtle" style={{ color: isLight ? "#475569" : "#cbd5e1" }}>

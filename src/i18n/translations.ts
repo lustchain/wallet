@@ -60,7 +60,7 @@ export const translations: Record<string, Record<string, string>> = {
     dashboard_swap_desc: "Professional swap interface with premium token cards",
     dashboard_bridge_desc: "Polygon USDT ↔ LUST iUSD bridge flow",
     dashboard_activity_desc: "Detailed transaction history with gas and status",
-    dashboard_staking_desc: "Stake LUST and future staking pools",
+    dashboard_staking_desc: "Stake LUST and future rewards",
     dashboard_nfts_desc: "NFT gallery and collectibles",
 
     activity_title: "Activity",
@@ -103,13 +103,13 @@ export const translations: Record<string, Record<string, string>> = {
     settings_avatar_hint: "Your avatar is fully personal now.",
 
     staking_title: "Staking",
-    staking_subtitle: "Professional staking area for LUST and future pools.",
+    staking_subtitle: "Professional staking area for LUST rewards.",
     staking_coming: "Staking contracts will be connected here soon.",
     staking_primary: "Main LUST staking",
-    staking_secondary: "Future pools",
+    staking_secondary: "Future rewards",
     staking_primary_desc: "This area is ready for the official LUST staking contract.",
     staking_secondary_desc:
-      "Additional staking pools can be added later without changing the design.",
+      "Additional reward modules can be added later without changing the design.",
 
     nfts_title: "NFTs",
     nfts_loading: "Loading NFTs...",
@@ -177,7 +177,7 @@ export const translations: Record<string, Record<string, string>> = {
     dashboard_swap_desc: "Interface profissional de swap com cards premium",
     dashboard_bridge_desc: "Fluxo Polygon USDT ↔ LUST iUSD",
     dashboard_activity_desc: "Histórico detalhado com gas e status",
-    dashboard_staking_desc: "Stake de LUST e futuros pools",
+    dashboard_staking_desc: "Stake de LUST e futuras recompensas",
     dashboard_nfts_desc: "Galeria de NFTs e colecionáveis",
 
     activity_title: "Atividade",
@@ -220,13 +220,13 @@ export const translations: Record<string, Record<string, string>> = {
     settings_avatar_hint: "Seu avatar agora é totalmente pessoal.",
 
     staking_title: "Staking",
-    staking_subtitle: "Área profissional de staking para LUST e futuros pools.",
+    staking_subtitle: "Área profissional de staking para recompensas LUST.",
     staking_coming: "Os contratos de staking serão conectados aqui em breve.",
     staking_primary: "Staking principal LUST",
-    staking_secondary: "Pools futuros",
+    staking_secondary: "Recompensas futuras",
     staking_primary_desc: "Esta área já está pronta para o contrato oficial de staking da LUST.",
     staking_secondary_desc:
-      "Pools adicionais poderão ser adicionados depois sem mudar o design.",
+      "Módulos extras de recompensa poderão ser adicionados depois sem mudar o design.",
 
     nfts_title: "NFTs",
     nfts_loading: "Carregando NFTs...",
@@ -340,7 +340,7 @@ export const translations: Record<string, Record<string, string>> = {
     staking_subtitle: "Área profesional de staking para LUST y futuros pools.",
     staking_coming: "Los contratos de staking se conectarán aquí pronto.",
     staking_primary: "Staking principal LUST",
-    staking_secondary: "Pools futuros",
+    staking_secondary: "Recompensas futuras",
     staking_primary_desc: "Esta área ya está lista para el contrato oficial de staking de LUST.",
     staking_secondary_desc:
       "Se podrán agregar pools adicionales después sin cambiar el diseño.",

@@ -95,7 +95,7 @@ export default function AuthPanel({
       <div className="wallet-auth-wrap wallet-auth-layout">
         <div className="wallet-auth-hero">
           <img
-            src={baseUrl + "token-inri.png"}
+            src={baseUrl + "brand-inri.png"}
             alt="LUST"
             className="wallet-auth-logo"
             style={{
@@ -175,8 +175,8 @@ function tabButtonStyle(active: boolean, theme: "dark" | "light"): React.CSSProp
   return {
     padding: "10px 12px",
     borderRadius: 14,
-    border: active ? "1px solid #4d7ef2" : `1px solid ${theme === "light" ? "#dbe2f0" : "#252b39"}`,
-    background: active ? "rgb(215,46,126)" : theme === "light" ? "#f3f6fc" : "#141927",
+    border: active ? "1px solid rgba(215,46,126,.42)" : `1px solid ${theme === "light" ? "#f3d7e6" : "#2a0f20"}`,
+    background: active ? "rgb(215,46,126)" : theme === "light" ? "#fff7fb" : "#0a0a0f",
     color: active ? "#fff" : theme === "light" ? "#10131a" : "#ffffff",
     cursor: "pointer",
     fontWeight: 800,
@@ -189,7 +189,7 @@ function inputStyle(theme: "dark" | "light"): React.CSSProperties {
     padding: 13,
     borderRadius: 14,
     border: `1px solid ${theme === "light" ? "#dbe2f0" : "#252b39"}`,
-    background: theme === "light" ? "#f6f8fc" : "#0d111b",
+    background: theme === "light" ? "#fff7fb" : "#0a0a0f",
     color: theme === "light" ? "#10131a" : "#ffffff",
     outline: "none",
     boxSizing: "border-box",
@@ -203,7 +203,7 @@ function textareaStyle(theme: "dark" | "light"): React.CSSProperties {
     padding: 13,
     borderRadius: 14,
     border: `1px solid ${theme === "light" ? "#dbe2f0" : "#252b39"}`,
-    background: theme === "light" ? "#f6f8fc" : "#0d111b",
+    background: theme === "light" ? "#fff7fb" : "#0a0a0f",
     color: theme === "light" ? "#10131a" : "#ffffff",
     outline: "none",
     resize: "vertical",
@@ -230,7 +230,7 @@ function secondaryButtonStyle(theme: "dark" | "light"): React.CSSProperties {
     padding: "10px 14px",
     borderRadius: 12,
     border: `1px solid ${theme === "light" ? "#dbe2f0" : "#252b39"}`,
-    background: theme === "light" ? "#ffffff" : "#1b2741",
+    background: theme === "light" ? "#ffffff" : "#0a0a0f",
     color: theme === "light" ? "#10131a" : "#fff",
     cursor: "pointer",
     fontWeight: 700,
