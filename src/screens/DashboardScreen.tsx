@@ -121,12 +121,7 @@ export default function DashboardScreen({
             : "0 16px 42px rgba(0,0,0,.28)",
         }}
       >
-        <div
-          style={{
-            display: "grid",
-            gap: 14,
-          }}
-        >
+        <div style={{ display: "grid", gap: 14 }}>
           <div
             style={{
               display: "flex",
